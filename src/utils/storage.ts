@@ -67,14 +67,13 @@ export const CHECKLIST_CATEGORIES: ChecklistCategory[] = [
 ];
 
 const INITIAL_VEHICLES: Vehicle[] = [
-  { id: 'v1', type: 'Caminhão', name: 'Caminhão 01', licensePlate: 'ABC-1234', model: 'Constellation', brand: 'Volkswagen', year: '2020', status: 'OK' },
-  { id: 'v2', type: 'Caminhão', name: 'Caminhão 02', licensePlate: 'DEF-5678', model: 'FH 540', brand: 'Volvo', year: '2022', status: 'OK' },
-  { id: 'v3', type: 'Caminhão', name: 'Caminhão 03', licensePlate: 'GHI-9012', model: 'Actros', brand: 'Mercedes-Benz', year: '2021', status: 'OK' },
-  { id: 'v4', type: 'Pá Carregadeira', name: 'Pá Carregadeira CAT 938', licensePlate: 'MCH-0001', model: '938K', brand: 'Caterpillar', year: '2019', status: 'Atenção' },
-  { id: 'v5', type: 'Escavadeira', name: 'Escavadeira CAT 320', licensePlate: 'MCH-0002', model: '320 GX', brand: 'Caterpillar', year: '2021', status: 'OK' },
-  { id: 'v6', type: 'Trator', name: 'Trator John Deere', licensePlate: 'MCH-0003', model: '6115J', brand: 'John Deere', year: '2020', status: 'Crítico' },
-  { id: 'v7', type: 'Retroescavadeira', name: 'Retroescavadeira Case 580N', licensePlate: 'MCH-0004', model: '580N', brand: 'Case', year: '2018', status: 'OK' },
-  { id: 'v8', type: 'Empilhadeira', name: 'Empilhadeira Toyota', licensePlate: 'MCH-0005', model: '8FGU25', brand: 'Toyota', year: '2022', status: 'OK' },
+  { id: 'v1', type: 'Caminhão', name: 'Volvo FH 460', licensePlate: '', model: 'FH 460', brand: 'Volvo', year: '', status: 'OK' },
+  { id: 'v2', type: 'Caminhão', name: 'Mercedes 1720', licensePlate: '', model: '1720', brand: 'Mercedes-Benz', year: '', status: 'OK' },
+  { id: 'v3', type: 'Caminhão', name: 'Mercedes 1113', licensePlate: '', model: '1113', brand: 'Mercedes-Benz', year: '', status: 'OK' },
+  { id: 'v4', type: 'Caminhão', name: 'Mercedes 608', licensePlate: '', model: '608', brand: 'Mercedes-Benz', year: '', status: 'OK' },
+  { id: 'v5', type: 'Caminhão', name: 'Volkswagen 6-90', licensePlate: '', model: '6-90', brand: 'Volkswagen', year: '', status: 'OK' },
+  { id: 'v6', type: 'Outro', name: 'Fiat Strada', licensePlate: '', model: 'Strada', brand: 'Fiat', year: '', status: 'OK' },
+  { id: 'v7', type: 'Empilhadeira', name: 'Empilhadeira Forza 2.5T', licensePlate: '', model: '2.5T', brand: 'Forza', year: '', status: 'OK' },
 ];
 
 const INITIAL_DRIVERS: Driver[] = [
