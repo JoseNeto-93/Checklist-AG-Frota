@@ -230,7 +230,7 @@ export default function DriverManagement({
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
                       placeholder="Ex: João da Silva Reis"
-                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -244,7 +244,7 @@ export default function DriverManagement({
                       value={formRegistration}
                       onChange={(e) => setFormRegistration(e.target.value)}
                       placeholder="Ex: MTR-9003"
-                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -258,7 +258,7 @@ export default function DriverManagement({
                       value={formPhone}
                       onChange={(e) => setFormPhone(e.target.value)}
                       placeholder="Ex: (11) 98888-7777"
-                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -272,7 +272,7 @@ export default function DriverManagement({
                       value={formRole}
                       onChange={(e) => setFormRole(e.target.value)}
                       placeholder="Ex: Motorista de Caminhão, Operador de Munck..."
-                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
