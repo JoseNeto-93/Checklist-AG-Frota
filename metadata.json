@@ -1,0 +1,6 @@
+{
+  "name": "Checklist de Frota",
+  "description": "Aplicativo moderno e responsivo para checklists pré-operacionais de caminhões e máquinas, com painel para supervisores e interface simplificada para motoristas.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
