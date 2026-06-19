@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Checklist, Vehicle, Driver, HealthStatus } from '../types';
 import { CHECKLIST_CATEGORIES } from '../utils/storage';
 import { jsPDF } from 'jspdf';
@@ -75,12 +75,41 @@ export default function Dashboard({
     });
   }, [checklists, dateStart, dateEnd, filterVehicle, filterDriver, filterStatus]);
 
-  // Ensure charts render only after client mount to avoid Recharts measuring hidden/0px containers
+  // Ensure charts render only after container has a positive size
   const [mounted, setMounted] = useState(false);
+  const chartsRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    // delay mount briefly to allow layout to stabilize (helps Recharts measurements)
-    const t = setTimeout(() => setMounted(true), 150);
-    return () => clearTimeout(t);
+    const el = chartsRef.current;
+    if (!el) return;
+
+    // If already has positive size, mount immediately
+    if (el.clientWidth > 0 && el.clientHeight > 0) {
+      setMounted(true);
+      return;
+    }
+
+    // Use ResizeObserver to detect when layout gives it size
+    let ro: ResizeObserver | null = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const cr = entry.contentRect;
+        if (cr.width > 0 && cr.height > 0) {
+          setMounted(true);
+          if (ro) {
+            ro.disconnect();
+            ro = null;
+          }
+          return;
+        }
+      }
+    });
+    ro.observe(el);
+
+    // Fallback: ensure we don't hang if observer not supported or delayed
+    const fallback = setTimeout(() => setMounted(true), 1500);
+    return () => {
+      if (ro) ro.disconnect();
+      clearTimeout(fallback);
+    };
   }, []);
 
   // 2. Compute dynamic KPIs
