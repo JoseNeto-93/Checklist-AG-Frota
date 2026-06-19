@@ -95,12 +95,9 @@ const INITIAL_CHECKLISTS: Checklist[] = [];
 
 // Local Storage Hooks
 export const getVehicles = (): Vehicle[] => {
-  const data = localStorage.getItem('fleet_vehicles');
-  if (!data) {
-    localStorage.setItem('fleet_vehicles', JSON.stringify(INITIAL_VEHICLES));
-    return INITIAL_VEHICLES;
-  }
-  return JSON.parse(data);
+  // Always reset to the canonical initial vehicles so all visitors see the same fleet
+  localStorage.setItem('fleet_vehicles', JSON.stringify(INITIAL_VEHICLES));
+  return INITIAL_VEHICLES;
 };
 
 export const saveVehicles = (vehicles: Vehicle[]) => {
@@ -108,12 +105,9 @@ export const saveVehicles = (vehicles: Vehicle[]) => {
 };
 
 export const getDrivers = (): Driver[] => {
-  const data = localStorage.getItem('fleet_drivers');
-  if (!data) {
-    localStorage.setItem('fleet_drivers', JSON.stringify(INITIAL_DRIVERS));
-    return INITIAL_DRIVERS;
-  }
-  return JSON.parse(data);
+  // Always reset to the canonical initial drivers so all visitors see the same list
+  localStorage.setItem('fleet_drivers', JSON.stringify(INITIAL_DRIVERS));
+  return INITIAL_DRIVERS;
 };
 
 export const saveDrivers = (drivers: Driver[]) => {
@@ -121,12 +115,9 @@ export const saveDrivers = (drivers: Driver[]) => {
 };
 
 export const getChecklists = (): Checklist[] => {
-  const data = localStorage.getItem('fleet_checklists');
-  if (!data) {
-    localStorage.setItem('fleet_checklists', JSON.stringify(INITIAL_CHECKLISTS));
-    return INITIAL_CHECKLISTS;
-  }
-  return JSON.parse(data);
+  // Reset checklists to the canonical initial set (currently empty) so there are no stale refs
+  localStorage.setItem('fleet_checklists', JSON.stringify(INITIAL_CHECKLISTS));
+  return INITIAL_CHECKLISTS;
 };
 
 export const saveChecklists = (checklists: Checklist[]) => {
