@@ -96,9 +96,17 @@ const INITIAL_CHECKLISTS: Checklist[] = [];
 
 // Local Storage Hooks
 export const getVehicles = (): Vehicle[] => {
-  // Keep vehicles in localStorage (initial canonical values)
-  localStorage.setItem('fleet_vehicles', JSON.stringify(INITIAL_VEHICLES));
-  return INITIAL_VEHICLES;
+  const data = localStorage.getItem('fleet_vehicles');
+  if (!data) {
+    localStorage.setItem('fleet_vehicles', JSON.stringify(INITIAL_VEHICLES));
+    return INITIAL_VEHICLES;
+  }
+  try {
+    return JSON.parse(data) as Vehicle[];
+  } catch (e) {
+    localStorage.setItem('fleet_vehicles', JSON.stringify(INITIAL_VEHICLES));
+    return INITIAL_VEHICLES;
+  }
 };
 
 export const saveVehicles = (vehicles: Vehicle[]) => {
@@ -106,8 +114,17 @@ export const saveVehicles = (vehicles: Vehicle[]) => {
 };
 
 export const getDrivers = (): Driver[] => {
-  localStorage.setItem('fleet_drivers', JSON.stringify(INITIAL_DRIVERS));
-  return INITIAL_DRIVERS;
+  const data = localStorage.getItem('fleet_drivers');
+  if (!data) {
+    localStorage.setItem('fleet_drivers', JSON.stringify(INITIAL_DRIVERS));
+    return INITIAL_DRIVERS;
+  }
+  try {
+    return JSON.parse(data) as Driver[];
+  } catch (e) {
+    localStorage.setItem('fleet_drivers', JSON.stringify(INITIAL_DRIVERS));
+    return INITIAL_DRIVERS;
+  }
 };
 
 export const saveDrivers = (drivers: Driver[]) => {
@@ -115,9 +132,17 @@ export const saveDrivers = (drivers: Driver[]) => {
 };
 
 export const getChecklists = (): Checklist[] => {
-  // Ensure there is at least an array in localStorage
-  localStorage.setItem('fleet_checklists', JSON.stringify(INITIAL_CHECKLISTS));
-  return INITIAL_CHECKLISTS;
+  const data = localStorage.getItem('fleet_checklists');
+  if (!data) {
+    localStorage.setItem('fleet_checklists', JSON.stringify(INITIAL_CHECKLISTS));
+    return INITIAL_CHECKLISTS;
+  }
+  try {
+    return JSON.parse(data) as Checklist[];
+  } catch (e) {
+    localStorage.setItem('fleet_checklists', JSON.stringify(INITIAL_CHECKLISTS));
+    return INITIAL_CHECKLISTS;
+  }
 };
 
 export const saveChecklists = (checklists: Checklist[]) => {
