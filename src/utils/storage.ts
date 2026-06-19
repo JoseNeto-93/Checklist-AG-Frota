@@ -1,4 +1,5 @@
 import { Vehicle, Driver, Checklist, ChecklistCategory, HealthStatus } from '../types';
+import { subscribeToRemoteChecklists, isRemoteAvailable } from './backend';
 
 export const CHECKLIST_CATEGORIES: ChecklistCategory[] = [
   {
@@ -95,7 +96,7 @@ const INITIAL_CHECKLISTS: Checklist[] = [];
 
 // Local Storage Hooks
 export const getVehicles = (): Vehicle[] => {
-  // Always reset to the canonical initial vehicles so all visitors see the same fleet
+  // Keep vehicles in localStorage (initial canonical values)
   localStorage.setItem('fleet_vehicles', JSON.stringify(INITIAL_VEHICLES));
   return INITIAL_VEHICLES;
 };
@@ -105,7 +106,6 @@ export const saveVehicles = (vehicles: Vehicle[]) => {
 };
 
 export const getDrivers = (): Driver[] => {
-  // Always reset to the canonical initial drivers so all visitors see the same list
   localStorage.setItem('fleet_drivers', JSON.stringify(INITIAL_DRIVERS));
   return INITIAL_DRIVERS;
 };
@@ -115,7 +115,7 @@ export const saveDrivers = (drivers: Driver[]) => {
 };
 
 export const getChecklists = (): Checklist[] => {
-  // Reset checklists to the canonical initial set (currently empty) so there are no stale refs
+  // Ensure there is at least an array in localStorage
   localStorage.setItem('fleet_checklists', JSON.stringify(INITIAL_CHECKLISTS));
   return INITIAL_CHECKLISTS;
 };
@@ -154,3 +154,19 @@ export const recalculateVehicleStatuses = () => {
   saveVehicles(updatedVehicles);
   return updatedVehicles;
 };
+
+/* Remote sync helpers -------------------------------------------------- */
+export function enableRemoteSync() {
+  if (!isRemoteAvailable) return () => {};
+  // Subscribe to remote checklists and mirror into localStorage so the UI can read them normally
+  const unsub = subscribeToRemoteChecklists((items) => {
+    // Save remote items to localStorage
+    localStorage.setItem('fleet_checklists', JSON.stringify(items));
+    // Update derived vehicle statuses and vehicles local cache
+    recalculateVehicleStatuses();
+    // Emit event so UI components can react if needed
+    window.dispatchEvent(new Event('fleet_checklists_updated'));
+  });
+  return unsub;
+}
+

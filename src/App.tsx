@@ -7,7 +7,9 @@ import {
   recalculateVehicleStatuses,
   saveVehicles,
   saveDrivers,
+  enableRemoteSync,
 } from './utils/storage';
+import { saveChecklistRemote, isRemoteAvailable as remoteAvailable } from './utils/backend';
 import { Vehicle, Driver, Checklist, UserSession, UserRole } from './types';
 import Dashboard from './components/Dashboard';
 import FleetManagement from './components/FleetManagement';
@@ -94,6 +96,23 @@ export default function App() {
 
     // Initial vehicle health update based on history
     recalculateVehicleStatuses();
+    // Enable remote sync (if configured) so mobile submissions propagate
+    try {
+      const unsub = enableRemoteSync();
+      // When remote updates mirror to localStorage, listen and update state
+      const handler = () => {
+        const updated = getChecklists();
+        setChecklists(updated);
+        recalculateVehicleStatuses();
+      };
+      window.addEventListener('fleet_checklists_updated', handler);
+      return () => {
+        window.removeEventListener('fleet_checklists_updated', handler);
+        if (typeof unsub === 'function') unsub();
+      };
+    } catch (e) {
+      // ignore if remote not configured
+    }
   }, []);
 
   // Sync theme with DOM classes smoothly
@@ -156,6 +175,13 @@ export default function App() {
     const updatedHistory = [newChecklist, ...checklists];
     setChecklists(updatedHistory);
     saveChecklists(updatedHistory);
+
+    // Also attempt to persist remotely so other devices receive it
+    try {
+      if (remoteAvailable) saveChecklistRemote(newChecklist).catch(() => {});
+    } catch (e) {
+      // ignore remote errors
+    }
 
     // 2. Refresh vehicle status
     const updatedVehicles = recalculateVehicleStatuses();
