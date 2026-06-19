@@ -182,6 +182,7 @@ export const recalculateVehicleStatuses = () => {
 
 /* Remote sync helpers -------------------------------------------------- */
 export function enableRemoteSync() {
+  console.log('[storage] enableRemoteSync called; remoteAvailable=', isRemoteAvailable);
   if (!isRemoteAvailable) return () => {};
   // First, try to fetch the current state once (helps ensure initial population)
   getRemoteChecklists().then((items) => {
@@ -190,12 +191,14 @@ export function enableRemoteSync() {
       recalculateVehicleStatuses();
       window.dispatchEvent(new Event('fleet_checklists_updated'));
     }
-  }).catch(() => {
+  }).catch((e) => {
+    console.error('[storage] getRemoteChecklists failed (ignored):', e);
     // ignore remote errors (rules/auth) — subscription may still work
   });
 
   // Then subscribe to live updates and mirror them into localStorage
   const unsub = subscribeToRemoteChecklists((items) => {
+    console.log('[storage] subscribe received items:', items?.length ?? 0);
     localStorage.setItem('fleet_checklists', JSON.stringify(items));
     recalculateVehicleStatuses();
     window.dispatchEvent(new Event('fleet_checklists_updated'));

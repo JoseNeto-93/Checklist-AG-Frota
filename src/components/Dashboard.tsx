@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Checklist, Vehicle, Driver, HealthStatus } from '../types';
 import { CHECKLIST_CATEGORIES } from '../utils/storage';
 import { jsPDF } from 'jspdf';
@@ -74,6 +74,12 @@ export default function Dashboard({
       return true;
     });
   }, [checklists, dateStart, dateEnd, filterVehicle, filterDriver, filterStatus]);
+
+  // Ensure charts render only after client mount to avoid Recharts measuring hidden/0px containers
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // 2. Compute dynamic KPIs
   const kpis = useMemo(() => {
@@ -775,10 +781,10 @@ export default function Dashboard({
             <TrendingUp className="w-4 h-4 text-green-600" />
             <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">Volume de Checklists por dia</h3>
           </div>
-          <div className="h-64">
+          <div className="h-64 min-h-[160px] min-w-0">
             {checklists.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-gray-400">Nenhum dado gravado.</div>
-            ) : (
+            ) : mounted ? (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartChecklistsPerDay} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <XAxis dataKey="data" stroke="#888888" fontSize={11} tickLine={false} axisLine={false} />
@@ -787,6 +793,8 @@ export default function Dashboard({
                   <Line type="monotone" dataKey="Inspeções" stroke="#16A34A" strokeWidth={3} activeDot={{ r: 6 }} dot={{ r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
+            ) : (
+              <div className="h-full" />
             )}
           </div>
         </div>
@@ -797,10 +805,10 @@ export default function Dashboard({
             <AlertCircle className="w-4 h-4 text-red-600" />
             <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">Itens críticos acumulados por veículo</h3>
           </div>
-          <div className="h-64">
+          <div className="h-64 min-h-[160px] min-w-0">
             {chartCriticalPerVehicle.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-gray-400">Excelente! Nenhum item crítico registrado.</div>
-            ) : (
+            ) : mounted ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartCriticalPerVehicle} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <XAxis dataKey="Veículo" stroke="#888888" fontSize={10} tickLine={false} />
@@ -809,6 +817,8 @@ export default function Dashboard({
                   <Bar dataKey="Críticos" fill="#DC2626" radius={[4, 4, 0, 0]} barSize={25} />
                 </BarChart>
               </ResponsiveContainer>
+            ) : (
+              <div className="h-full" />
             )}
           </div>
         </div>
@@ -819,10 +829,10 @@ export default function Dashboard({
             <Gauge className="w-4 h-4 text-amber-500" />
             <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide font-sans">Ocorrências por Tipo de Equipamento</h3>
           </div>
-          <div className="h-64">
+          <div className="h-64 min-h-[160px] min-w-0">
             {checklists.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-gray-400">Nenhum dado gravado.</div>
-            ) : (
+            ) : mounted ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartEquipmentCriticals} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <XAxis dataKey="name" stroke="#888888" fontSize={9} tickLine={false} />
@@ -833,6 +843,8 @@ export default function Dashboard({
                   <Bar dataKey="Atenção" stackId="stack" fill="#F59E0B" />
                 </BarChart>
               </ResponsiveContainer>
+            ) : (
+              <div className="h-full" />
             )}
           </div>
         </div>
@@ -845,24 +857,28 @@ export default function Dashboard({
           </div>
           <div className="h-64 flex flex-col sm:flex-row items-center justify-center gap-4">
             <div className="w-full h-44 sm:w-1/2">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Tooltip contentStyle={{ background: isDarkMode ? '#1F2937' : '#FFFFFF', border: 'none', borderRadius: '12px', fontSize: '11px', color: isDarkMode ? '#FFF' : '#000' }} />
-                  <Pie
-                    data={chartFleetRatios}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={45}
-                    outerRadius={65}
-                    paddingAngle={4}
-                    dataKey="value"
-                  >
-                    {chartFleetRatios.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
+              {mounted ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Tooltip contentStyle={{ background: isDarkMode ? '#1F2937' : '#FFFFFF', border: 'none', borderRadius: '12px', fontSize: '11px', color: isDarkMode ? '#FFF' : '#000' }} />
+                    <Pie
+                      data={chartFleetRatios}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={45}
+                      outerRadius={65}
+                      paddingAngle={4}
+                      dataKey="value"
+                    >
+                      {chartFleetRatios.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-full" />
+              )}
             </div>
 
             <div className="space-y-2 text-xs">

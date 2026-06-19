@@ -23,8 +23,14 @@ if (required) {
     db = getFirestore();
   } catch (e) {
     db = null;
+    console.error('[firebase] getFirestore() failed:', e);
     // silent fallback
   }
+}
+
+if (!db) {
+  // helpful debug in the browser console when envs are present but init failed
+  console.warn('[firebase] Firestore not initialized. Remote sync disabled.');
 }
 
 export { db };
