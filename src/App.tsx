@@ -99,6 +99,7 @@ export default function App() {
     // Enable remote sync (if configured) so mobile submissions propagate
     try {
       const unsub = enableRemoteSync();
+      console.log('[app] remoteAvailable:', remoteAvailable, 'VITE_FIREBASE_PROJECT_ID=', !!import.meta.env.VITE_FIREBASE_PROJECT_ID, 'VITE_FIREBASE_API_KEY=', !!import.meta.env.VITE_FIREBASE_API_KEY);
       // When remote updates mirror to localStorage, listen and update state
       const handler = () => {
         const updated = getChecklists();

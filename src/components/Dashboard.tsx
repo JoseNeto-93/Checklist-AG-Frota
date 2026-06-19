@@ -78,7 +78,9 @@ export default function Dashboard({
   // Ensure charts render only after client mount to avoid Recharts measuring hidden/0px containers
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setMounted(true);
+    // delay mount briefly to allow layout to stabilize (helps Recharts measurements)
+    const t = setTimeout(() => setMounted(true), 150);
+    return () => clearTimeout(t);
   }, []);
 
   // 2. Compute dynamic KPIs
