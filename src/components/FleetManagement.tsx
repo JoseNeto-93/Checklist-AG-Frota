@@ -317,7 +317,7 @@ export default function FleetManagement({
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
                       placeholder="Ex: Pá Carregadeira CAT 938 ou Caminhão 04"
-                      className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -329,7 +329,7 @@ export default function FleetManagement({
                     <select
                       value={formType}
                       onChange={(e) => setFormType(e.target.value as VehicleType)}
-                      className="w-full bg-white dark:bg-gray-800 text-gray-905 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all shadow-sm"
                     >
                       <option value="Caminhão">Caminhão</option>
                       <option value="Pá Carregadeira">Pá Carregadeira</option>
@@ -350,7 +350,7 @@ export default function FleetManagement({
                       value={formPlate}
                       onChange={(e) => setFormPlate(e.target.value)}
                       placeholder="Ex: ABC-1234 ou MCH-0010"
-                      className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -364,7 +364,7 @@ export default function FleetManagement({
                       value={formBrand}
                       onChange={(e) => setFormBrand(e.target.value)}
                       placeholder="Ex: Caterpillar, Scania, Case"
-                      className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
+                      className="w-full bg-white dark:bg-gray-805 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 text-sm rounded-xl px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -427,7 +427,7 @@ export default function FleetManagement({
                   type="submit"
                   className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs rounded-xl transition"
                 >
-                  {editingVehicle ? 'Atualizar Dados' : 'Acesar e Salvar'}
+                  {editingVehicle ? 'Atualizar Dados' : 'Cadastrar Equipamento'}
                 </button>
               </div>
             </form>
