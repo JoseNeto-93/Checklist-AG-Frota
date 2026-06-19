@@ -1,5 +1,5 @@
 import { Vehicle, Driver, Checklist, ChecklistCategory, HealthStatus } from '../types';
-import { subscribeToRemoteChecklists, isRemoteAvailable } from './backend';
+import { subscribeToRemoteChecklists, isRemoteAvailable, getRemoteChecklists } from './backend';
 
 export const CHECKLIST_CATEGORIES: ChecklistCategory[] = [
   {
@@ -183,15 +183,24 @@ export const recalculateVehicleStatuses = () => {
 /* Remote sync helpers -------------------------------------------------- */
 export function enableRemoteSync() {
   if (!isRemoteAvailable) return () => {};
-  // Subscribe to remote checklists and mirror into localStorage so the UI can read them normally
+  // First, try to fetch the current state once (helps ensure initial population)
+  getRemoteChecklists().then((items) => {
+    if (items && items.length) {
+      localStorage.setItem('fleet_checklists', JSON.stringify(items));
+      recalculateVehicleStatuses();
+      window.dispatchEvent(new Event('fleet_checklists_updated'));
+    }
+  }).catch(() => {
+    // ignore remote errors (rules/auth) — subscription may still work
+  });
+
+  // Then subscribe to live updates and mirror them into localStorage
   const unsub = subscribeToRemoteChecklists((items) => {
-    // Save remote items to localStorage
     localStorage.setItem('fleet_checklists', JSON.stringify(items));
-    // Update derived vehicle statuses and vehicles local cache
     recalculateVehicleStatuses();
-    // Emit event so UI components can react if needed
     window.dispatchEvent(new Event('fleet_checklists_updated'));
   });
+
   return unsub;
 }
 
