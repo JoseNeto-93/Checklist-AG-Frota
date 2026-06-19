@@ -35,6 +35,47 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  // Quick debug route: visit /__debug/env to see which VITE_FIREBASE_* were embedded at build time
+  if (typeof window !== 'undefined' && window.location.pathname === '/__debug/env') {
+    const env = {
+      VITE_FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_API_KEY || null,
+      VITE_FIREBASE_AUTH_DOMAIN: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || null,
+      VITE_FIREBASE_PROJECT_ID: import.meta.env.VITE_FIREBASE_PROJECT_ID || null,
+      VITE_FIREBASE_STORAGE_BUCKET: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || null,
+      VITE_FIREBASE_MESSAGING_SENDER_ID: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || null,
+      VITE_FIREBASE_APP_ID: import.meta.env.VITE_FIREBASE_APP_ID || null,
+    } as Record<string, string | null>;
+
+    const mask = (v: string | null) => {
+      if (!v) return 'null';
+      if (v.length <= 8) return '***';
+      return `${v.slice(0, 4)}...${v.slice(-4)}`;
+    };
+
+    return (
+      <div style={{ padding: 24, fontFamily: 'Inter, sans-serif' }}>
+        <h2>Debug: VITE_FIREBASE_* (build-time)</h2>
+        <p>These values are replaced at build time by Vite. If they are <strong>null</strong> here, the build didn't include them.</p>
+        <table style={{ borderCollapse: 'collapse', width: '100%', maxWidth: 800 }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left', padding: 8, borderBottom: '1px solid #ddd' }}>Variable</th>
+              <th style={{ textAlign: 'left', padding: 8, borderBottom: '1px solid #ddd' }}>Value (masked)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(env).map(([k, v]) => (
+              <tr key={k}>
+                <td style={{ padding: 8, borderBottom: '1px solid #f4f4f4' }}>{k}</td>
+                <td style={{ padding: 8, borderBottom: '1px solid #f4f4f4', fontFamily: 'monospace' }}>{mask(v)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p style={{ marginTop: 12 }}>If any values are <strong>null</strong>, please confirm the environment variables are set in Vercel and trigger a full rebuild.</p>
+      </div>
+    );
+  }
   // Theme state
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const saved = localStorage.getItem('theme_dark');
