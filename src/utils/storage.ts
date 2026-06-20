@@ -1,5 +1,6 @@
 import { Vehicle, Driver, Checklist, ChecklistCategory, HealthStatus } from '../types';
 import { subscribeToRemoteChecklists, isRemoteAvailable, getRemoteChecklists } from './backend';
+import { initFirebaseRuntime } from './firebase';
 
 export const CHECKLIST_CATEGORIES: ChecklistCategory[] = [
   {
@@ -182,8 +183,10 @@ export const recalculateVehicleStatuses = () => {
 
 /* Remote sync helpers -------------------------------------------------- */
 export function enableRemoteSync() {
-  console.log('[storage] enableRemoteSync called; remoteAvailable=', isRemoteAvailable);
-  if (!isRemoteAvailable) return () => {};
+  // Try to initialize Firebase at runtime (may read localStorage-config or env)
+  initFirebaseRuntime();
+  console.log('[storage] enableRemoteSync called; remoteAvailable=', isRemoteAvailable());
+  if (!isRemoteAvailable()) return () => {};
   // First, try to fetch the current state once (helps ensure initial population)
   getRemoteChecklists().then((items) => {
     if (items && items.length) {

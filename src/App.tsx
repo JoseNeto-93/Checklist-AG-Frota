@@ -9,7 +9,7 @@ import {
   saveDrivers,
   enableRemoteSync,
 } from './utils/storage';
-import { saveChecklistRemote, isRemoteAvailable as remoteAvailable } from './utils/backend';
+import { saveChecklistRemote, isRemoteAvailable } from './utils/backend';
 import { Vehicle, Driver, Checklist, UserSession, UserRole } from './types';
 import Dashboard from './components/Dashboard';
 import FleetManagement from './components/FleetManagement';
@@ -140,7 +140,7 @@ export default function App() {
     // Enable remote sync (if configured) so mobile submissions propagate
     try {
       const unsub = enableRemoteSync();
-      console.log('[app] remoteAvailable:', remoteAvailable, 'VITE_FIREBASE_PROJECT_ID=', !!import.meta.env.VITE_FIREBASE_PROJECT_ID, 'VITE_FIREBASE_API_KEY=', !!import.meta.env.VITE_FIREBASE_API_KEY);
+      console.log('[app] remoteAvailable:', isRemoteAvailable(), 'VITE_FIREBASE_PROJECT_ID=', !!import.meta.env.VITE_FIREBASE_PROJECT_ID, 'VITE_FIREBASE_API_KEY=', !!import.meta.env.VITE_FIREBASE_API_KEY);
       // When remote updates mirror to localStorage, listen and update state
       const handler = () => {
         const updated = getChecklists();
@@ -220,7 +220,7 @@ export default function App() {
 
     // Also attempt to persist remotely so other devices receive it
     try {
-      if (remoteAvailable) saveChecklistRemote(newChecklist).catch(() => {});
+      if (isRemoteAvailable()) saveChecklistRemote(newChecklist).catch(() => {});
     } catch (e) {
       // ignore remote errors
     }

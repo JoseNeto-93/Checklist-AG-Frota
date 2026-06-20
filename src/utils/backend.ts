@@ -12,7 +12,9 @@ import type { Checklist } from '../types';
 
 const COLLECTION = 'checklists';
 
-export const isRemoteAvailable = !!db;
+export function isRemoteAvailable() {
+  return !!db;
+}
 
 export async function saveChecklistRemote(checklist: Checklist) {
   if (!db) return null;
