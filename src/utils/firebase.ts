@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { collection, getDocs, query, limit } from 'firebase/firestore';
 
 let db: ReturnType<typeof getFirestore> | null = null;
 
@@ -64,3 +65,21 @@ export function saveFirebaseConfigToLocalStorage(cfg: Record<string, string>) {
 }
 
 export { db };
+
+/**
+ * Quick test to see if Firestore is reachable and readable.
+ * Returns true when a simple read succeeds, otherwise returns an error message string.
+ */
+export async function testFirestoreConnection(): Promise<boolean | string> {
+  try {
+    const firestore = initFirebaseRuntime();
+    if (!firestore) return 'Firestore not initialized';
+    const col = collection(firestore, 'checklists');
+    const q = query(col, limit(1));
+    await getDocs(q);
+    return true;
+  } catch (e: any) {
+    console.error('[firebase] testFirestoreConnection failed:', e);
+    return e?.message || String(e);
+  }
+}

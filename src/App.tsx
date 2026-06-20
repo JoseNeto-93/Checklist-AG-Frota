@@ -33,7 +33,7 @@ import {
   CheckCircle,
   Clock
 } from 'lucide-react';
-import { saveFirebaseConfigToLocalStorage } from './utils/firebase';
+import { saveFirebaseConfigToLocalStorage, testFirestoreConnection, initFirebaseRuntime } from './utils/firebase';
 
 export default function App() {
   // Quick debug route: visit /__debug/env to see which VITE_FIREBASE_* were embedded at build time
@@ -220,6 +220,8 @@ export default function App() {
   const [fbStorageBucket, setFbStorageBucket] = useState('');
   const [fbMessagingSenderId, setFbMessagingSenderId] = useState('');
   const [fbAppId, setFbAppId] = useState('');
+  const [fbStatus, setFbStatus] = useState<'unknown'|'connected'|'disabled'|'failed'>('unknown');
+  const [fbStatusMsg, setFbStatusMsg] = useState('');
 
   const handleSaveFirebaseConfig = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -240,6 +242,23 @@ export default function App() {
       // ignore
     }
     setShowFirebaseModal(false);
+  };
+
+  const checkFbStatus = async () => {
+    initFirebaseRuntime();
+    try {
+      const res = await testFirestoreConnection();
+      if (res === true) {
+        setFbStatus('connected');
+        setFbStatusMsg('Connected to Firestore');
+      } else {
+        setFbStatus('failed');
+        setFbStatusMsg(String(res));
+      }
+    } catch (e: any) {
+      setFbStatus('failed');
+      setFbStatusMsg(e?.message || String(e));
+    }
   };
 
   // Callback after operator submits checklist sheet successfully
@@ -436,6 +455,13 @@ export default function App() {
                 >
                   Configurar Firebase (runtime)
                 </button>
+                <div className="text-xs text-gray-300">
+                  <div className="mb-2">Status Firestore: <span className="font-medium text-sm">{fbStatus}</span></div>
+                  <div className="flex gap-2">
+                    <button onClick={checkFbStatus} className="px-2 py-1 bg-gray-800/40 rounded text-xs">Testar conexão</button>
+                  </div>
+                  {fbStatusMsg && <div className="mt-2 text-[11px] text-gray-400">{fbStatusMsg}</div>}
+                </div>
               </div>
               <div className="space-y-6">
                 {/* Brand Banner */}
