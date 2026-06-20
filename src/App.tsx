@@ -36,17 +36,6 @@ import {
 import { saveFirebaseConfigToLocalStorage, testFirestoreConnection, initFirebaseRuntime } from './utils/firebase';
 
 export default function App() {
-  // If the deploy/runtime doesn't have firebase config saved yet, persist
-  // the user's provided project config so the app can initialize Firestore.
-  const DEFAULT_FIREBASE_CONFIG = {
-    apiKey: "AIzaSyBGHpcK5IdSwHoiytHYF8CRYHwLrRswlmA",
-    authDomain: "checklist-ag-frota.firebaseapp.com",
-    projectId: "checklist-ag-frota",
-    storageBucket: "checklist-ag-frota.firebasestorage.app",
-    messagingSenderId: "109061902399",
-    appId: "1:109061902399:web:bcafe7a2574d85ddf7a88a",
-    measurementId: "G-NP3L8TPVFL",
-  } as Record<string, string>;
   // Quick debug route: visit /__debug/env to see which VITE_FIREBASE_* were embedded at build time
   if (typeof window !== 'undefined' && window.location.pathname === '/__debug/env') {
     const env = {
@@ -151,10 +140,6 @@ export default function App() {
     recalculateVehicleStatuses();
     // Enable remote sync (if configured) so mobile submissions propagate
     try {
-      // Persist default Firebase config if not present (one-time)
-      if (!localStorage.getItem('fleet_firebase_config')) {
-        saveFirebaseConfigToLocalStorage(DEFAULT_FIREBASE_CONFIG);
-      }
       const unsub = enableRemoteSync();
       console.log('[app] remoteAvailable:', isRemoteAvailable(), 'VITE_FIREBASE_PROJECT_ID=', !!import.meta.env.VITE_FIREBASE_PROJECT_ID, 'VITE_FIREBASE_API_KEY=', !!import.meta.env.VITE_FIREBASE_API_KEY);
       // When remote updates mirror to localStorage, listen and update state
