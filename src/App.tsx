@@ -421,7 +421,6 @@ export default function App() {
                   >
                     <p className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">Perfil Motorista</p>
                     <p className="text-[10px] text-gray-500">Usuário: motorista</p>
-                    <p className="text-[10px] text-gray-400">Senha: 12345</p>
                   </button>
 
                   <button
@@ -434,7 +433,6 @@ export default function App() {
                   >
                     <p className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">Administrador</p>
                     <p className="text-[10px] text-gray-500">Usuário: administrador</p>
-                    <p className="text-[10px] text-gray-400">Senha: 12345</p>
                   </button>
                 </div>
               </div>
