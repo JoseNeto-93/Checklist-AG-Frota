@@ -805,7 +805,7 @@ export default function Dashboard({
       </div>
 
       {/* RECHARTS PLOTS CONTAINER */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 print:hidden">
+      <div ref={chartsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 print:hidden">
         {/* Graph 1: Checklists volumes daily */}
         <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-5 rounded-2xl shadow-sm text-left">
           <div className="flex items-center gap-2 mb-4">
