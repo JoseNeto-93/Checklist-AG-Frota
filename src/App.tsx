@@ -33,6 +33,7 @@ import {
   CheckCircle,
   Clock
 } from 'lucide-react';
+import { saveFirebaseConfigToLocalStorage } from './utils/firebase';
 
 export default function App() {
   // Quick debug route: visit /__debug/env to see which VITE_FIREBASE_* were embedded at build time
@@ -209,6 +210,36 @@ export default function App() {
     localStorage.removeItem('fleet_active_vehicle_id');
     setIsCreatingChecklist(false);
     setIsMobileMenuOpen(false);
+  };
+
+  // Firebase runtime config modal (admin only)
+  const [showFirebaseModal, setShowFirebaseModal] = useState(false);
+  const [fbApiKey, setFbApiKey] = useState('');
+  const [fbAuthDomain, setFbAuthDomain] = useState('');
+  const [fbProjectId, setFbProjectId] = useState('');
+  const [fbStorageBucket, setFbStorageBucket] = useState('');
+  const [fbMessagingSenderId, setFbMessagingSenderId] = useState('');
+  const [fbAppId, setFbAppId] = useState('');
+
+  const handleSaveFirebaseConfig = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const cfg = {
+      apiKey: fbApiKey,
+      authDomain: fbAuthDomain,
+      projectId: fbProjectId,
+      storageBucket: fbStorageBucket,
+      messagingSenderId: fbMessagingSenderId,
+      appId: fbAppId,
+    };
+    saveFirebaseConfigToLocalStorage(cfg);
+    // re-enable sync
+    try {
+      const unsub = enableRemoteSync();
+      if (typeof unsub === 'function') unsub();
+    } catch (err) {
+      // ignore
+    }
+    setShowFirebaseModal(false);
   };
 
   // Callback after operator submits checklist sheet successfully
@@ -398,6 +429,14 @@ export default function App() {
           {/* A. SIDEBAR NAVIGATION FOR ADMIN ROLE */}
           {session.role === 'administrador' && (
             <aside className="hidden lg:flex flex-col w-64 bg-gray-900 border-r border-gray-800 text-white h-full justify-between print:hidden">
+              <div className="p-4">
+                <button
+                  onClick={() => setShowFirebaseModal(true)}
+                  className="w-full py-2 px-3 mb-3 bg-emerald-600 hover:bg-emerald-700 rounded-lg text-sm font-medium"
+                >
+                  Configurar Firebase (runtime)
+                </button>
+              </div>
               <div className="space-y-6">
                 {/* Brand Banner */}
                 <div className="p-5 border-b border-gray-800 flex items-center gap-3">
@@ -471,6 +510,26 @@ export default function App() {
                 </button>
               </div>
             </aside>
+          )}
+
+          {showFirebaseModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <form onSubmit={handleSaveFirebaseConfig} className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-lg">
+                <h3 className="text-lg font-bold mb-3">Configurar Firebase (runtime)</h3>
+                <div className="space-y-2">
+                  <input placeholder="API Key" value={fbApiKey} onChange={(e) => setFbApiKey(e.target.value)} className="w-full p-2 border rounded" />
+                  <input placeholder="Auth Domain" value={fbAuthDomain} onChange={(e) => setFbAuthDomain(e.target.value)} className="w-full p-2 border rounded" />
+                  <input placeholder="Project ID" value={fbProjectId} onChange={(e) => setFbProjectId(e.target.value)} className="w-full p-2 border rounded" />
+                  <input placeholder="Storage Bucket" value={fbStorageBucket} onChange={(e) => setFbStorageBucket(e.target.value)} className="w-full p-2 border rounded" />
+                  <input placeholder="Messaging Sender ID" value={fbMessagingSenderId} onChange={(e) => setFbMessagingSenderId(e.target.value)} className="w-full p-2 border rounded" />
+                  <input placeholder="App ID" value={fbAppId} onChange={(e) => setFbAppId(e.target.value)} className="w-full p-2 border rounded" />
+                </div>
+                <div className="mt-4 flex gap-2 justify-end">
+                  <button type="button" onClick={() => setShowFirebaseModal(false)} className="px-3 py-2 bg-gray-200 rounded">Cancelar</button>
+                  <button type="submit" className="px-3 py-2 bg-emerald-600 text-white rounded">Salvar e Iniciar</button>
+                </div>
+              </form>
+            </div>
           )}
 
           {/* B. MAIN INTERFACE CONTENT BLOCK SCREEN */}
